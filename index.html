@@ -9,7 +9,7 @@
     /* Estilos extraídos de CSS */
     body {
       font-family: Arial, sans-serif;
-      background:
+      background: #f4f4f4; /* Añadí un color de fondo básico por si acaso */
       margin: 0;
     }
 
@@ -23,6 +23,7 @@
     .cover {
       width: 100%;
       border-radius: 18px;
+      transition: opacity 0.3s ease; /* Pequeña transición para suavizar el cambio de imagen */
     }
 
     button {
@@ -73,30 +74,12 @@
       width: 80%;
       display: block;
       margin: 10px auto 15px auto;
-
       -webkit-appearance: none;
       appearance: none;
-
-      /* 
-         La barra se pinta dinámicamente mediante JavaScript.
-         Azul = parte reproducida
-         Gris = parte restante
-      */
-      background: linear-gradient(
-        to right,
-        #007bff 0%,
-        #007bff 0%,
-        #e0e0e0 0%,
-        #e0e0e0 100%
-      );
-
+      background: linear-gradient(to right, #007bff 0%, #007bff 0%, #e0e0e0 0%, #e0e0e0 100%);
       outline: none;
       border-radius: 4px;
     }
-
-    /* =========================================================
-       BARRA - CHROME / EDGE / SAFARI
-       ========================================================= */
 
     input[type="range"]::-webkit-slider-runnable-track {
       width: 100%;
@@ -105,10 +88,6 @@
       border-radius: 4px;
     }
 
-    /* =========================================================
-       BARRA - FIREFOX
-       ========================================================= */
-
     input[type="range"]::-moz-range-track {
       width: 100%;
       height: 6px;
@@ -116,47 +95,27 @@
       border-radius: 4px;
     }
 
-    /* =========================================================
-       PUNTO DE LA BARRA - CHROME / EDGE / SAFARI
-       ========================================================= */
-
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-
       height: 18px;
       width: 18px;
-
       border-radius: 50%;
-
-      /* MISMO AZUL QUE LA PARTE RECORRIDA */
       background: #007bff;
-
       cursor: pointer;
-
       margin-top: -6px;
     }
-
-    /* =========================================================
-       PUNTO DE LA BARRA - FIREFOX
-       ========================================================= */
 
     input[type="range"]::-moz-range-thumb {
       height: 18px;
       width: 18px;
-
       border-radius: 50%;
-
-      /* MISMO AZUL QUE LA PARTE RECORRIDA */
       background: #007bff;
-
       border: none;
-
       cursor: pointer;
     }
 
-    #cur,
-    #dur {
+    #cur, #dur {
       font-size: 18px;
       font-weight: bold;
     }
@@ -204,7 +163,7 @@
 
   <div class="wrap">
 
-    <img src="portada.png" class="cover" alt="Portada">
+    <img id="cover-img" src="portada.png" class="cover" alt="Portada">
     
     <audio id="a" src="audio.mp3"></audio>
     
@@ -216,50 +175,44 @@
       <span id="cur">0:00</span> / <span id="dur">0:00</span>
     </div>
 
-    <!-- Contenedor para la lista de capítulos/secciones -->
     <div id="buttons"></div>
 
-    <!-- BOTÓN FINAL CON IMAGEN -->
     <div class="contenedor-enlace-web">
-
-      <a href="https://readmindbk.github.io/WEB/" 
-         class="enlace-imagen" 
-         target="_blank">
-
-        <img class="imagen-boton" 
-             src="web.png" 
-             alt="Sitio Web">
-
+      <a href="https://readmindbk.github.io/WEB/" class="enlace-imagen" target="_blank">
+        <img class="imagen-boton" src="web.png" alt="Sitio Web">
       </a>
-
     </div>
 
   </div>
 
-
   <script>
-
     /* =========================================================
-       SECCIONES DEL AUDIO
+       SECCIONES DEL AUDIO Y SUS IMÁGENES
        ========================================================= */
 
+    // CAMBIO 2: Agregamos la propiedad 'img' a cada sección.
+    // Aquí es donde tú puedes manipular qué imagen se muestra en cada momento.
     const sections = [
-      {t: 12, n: '1 Egyptian'},
-      {t: 30, n: '2 Mesopotamian'},
-      {t: 47, n: '3 Persian'},
-      {t: 62, n: '4 Greek'},
-      {t: 80, n: '5 Roman'},
-      {t: 97, n: '6 European'},
-      {t: 114, n: '7 Japanese'},
-      {t: 131, n: '8 Hindu'},
-      {t: 149, n: '9 Norse'},
-      {t: 165, n: '10 Celtic / Irish'},
-      {t: 184, n: '11 Algonquin'},
-      {t: 203, n: '12 Latin American'},
-      {t: 221, n: '13 Himalayan'},
-      {t: 240, n: '14 Medieval'}
+      {t: 21, n: '1 Egyptian', img: '1.png'},
+      {t: 52.5, n: '2 Mesopotamian', img: '2.png'},
+      {t: 79, n: '3 Persian', img: '3.png'},
+      {t: 106, n: '4 Greek', img: '4.png'},
+      {t: 134, n: '5 Roman', img: '5.png'},
+      {t: 161, n: '6 European', img: '6.png'},
+      {t: 190, n: '7 Japanese', img: '7.png'},
+      {t: 218, n: '8 Hindu', img: '8.png'},
+      {t: 242, n: '9 Norse', img: '9.png'},
+      {t: 269, n: '10 Celtic / Irish', img: '10.png'},
+      {t: 298, n: '11 Algonquin', img: '11.png'},
+      {t: 328, n: '12 Latin American', img: '12.png'},
+      {t: 358.5, n: '13 Himalayan', img: '13.png'},
+      {t: 388, n: '14 Medieval', img: '14.png'}
     ];
 
+
+ /* NUEVO: Variables para la despedida */
+    const tiempoDespedida = 416; // Segundo exacto donde inicia la despedida
+    const imagenDespedida = 'portada.png'; // Nombre de la imagen final
 
     /* =========================================================
        ELEMENTOS HTML
@@ -271,6 +224,7 @@
     const pr = document.getElementById('prog');
     const c = document.getElementById('cur');
     const d = document.getElementById('dur');
+    const coverImg = document.getElementById('cover-img'); 
 
 
     /* =========================================================
@@ -278,63 +232,35 @@
        ========================================================= */
 
     sections.forEach((s) => {
-
       const bt = document.createElement('button');
-
       bt.className = 'jump';
-
       bt.textContent = s.n;
-
       bt.onclick = () => {
         a.currentTime = s.t;
       };
-
       b.appendChild(bt);
-
     });
-
 
     /* =========================================================
        FORMATEAR TIEMPO
        ========================================================= */
 
     function fmt(x) {
-
       if (isNaN(x)) return "0:00";
-
       const min = Math.floor(x / 60);
-
       const sec = Math.floor(x % 60);
-
       return `${min}:${String(sec).padStart(2, '0')}`;
-
     }
-
 
     /* =========================================================
        ACTUALIZAR COLOR DE LA BARRA
        ========================================================= */
 
     function updateProgressBar() {
-
-      /*
-         Calculamos qué porcentaje del audio se reprodujo.
-      */
-
       if (!a.duration || !isFinite(a.duration)) {
         return;
       }
-
       const percentage = (a.currentTime / a.duration) * 100;
-
-
-      /*
-         Pintamos:
-
-         AZUL   = parte reproducida
-         GRIS   = parte restante
-      */
-
       pr.style.background = `
         linear-gradient(
           to right,
@@ -344,22 +270,16 @@
           #e0e0e0 100%
         )
       `;
-
     }
-
 
     /* =========================================================
        BOTÓN REPRODUCIR / PAUSE
        ========================================================= */
 
     p.onclick = () => {
-
       if (a.paused) {
-
         a.play();
-
-        p.textContent = "⏸ Pause";
-
+        p.textContent = "⏸ Pausa";
         p.animate(
           [
             { transform: "scale(1.2)" },
@@ -368,106 +288,88 @@
           ],
           { duration: 250 }
         );
-
       } else {
-
         a.pause();
-
-        p.textContent = "▶ Hear";
-
+        p.textContent = "▶ Escuchar";
       }
-
     };
-
 
     /* =========================================================
        CUANDO SE CONOCE LA DURACIÓN DEL AUDIO
        ========================================================= */
 
     a.addEventListener("loadedmetadata", () => {
-
       pr.min = 0;
-
       pr.max = a.duration;
-
       pr.step = 0.01;
-
       pr.value = 0;
-
       c.textContent = fmt(0);
-
       d.textContent = fmt(a.duration);
-
-      /* Iniciar barra completamente gris */
       updateProgressBar();
-
     });
 
-
     /* =========================================================
-       ACTUALIZAR BARRA, TIEMPO Y CAPÍTULO ACTIVO
+       ACTUALIZAR BARRA, TIEMPO, CAPÍTULO E IMAGEN
        ========================================================= */
 
     a.addEventListener("timeupdate", () => {
-
-      /* Actualizar posición */
+      /* Actualizar posición y tiempo */
       pr.value = a.currentTime;
-
-      /* Actualizar tiempo */
       c.textContent = fmt(a.currentTime);
-
-      /* ACTUALIZAR COLOR DE LA BARRA */
       updateProgressBar();
 
+      /* COMPROBAR SI ESTAMOS EN LA DESPEDIDA */
+      if (a.currentTime >= tiempoDespedida) {
+        
+        // 1. Desactivar todos los botones
+        document.querySelectorAll(".jump").forEach(btn => {
+          btn.classList.remove("active");
+        });
 
-      /* Determinar capítulo activo */
+        // 2. Colocar la imagen de despedida
+        if (coverImg.getAttribute('src') !== imagenDespedida) {
+          coverImg.src = imagenDespedida;
+        }
 
-      const activeIndex =
-        sections.filter(s => a.currentTime >= s.t).length - 1;
+      } else {
+        // COMPORTAMIENTO NORMAL DURANTE EL AUDIO
 
+        /* Determinar capítulo activo */
+        const activeIndex = sections.filter(s => a.currentTime >= s.t).length - 1;
 
-      document.querySelectorAll(".jump").forEach((btn, i) => {
+        /* Actualizar botones visuales */
+        document.querySelectorAll(".jump").forEach((btn, i) => {
+          btn.classList.toggle("active", i === activeIndex);
+        });
 
-        btn.classList.toggle(
-          "active",
-          i === activeIndex
-        );
-
-      });
-
+        /* Actualizar la imagen de portada */
+        const targetImage = activeIndex >= 0 ? sections[activeIndex].img : 'portada.png';
+        
+        if (coverImg.getAttribute('src') !== targetImage) {
+          coverImg.src = targetImage;
+        }
+      }
     });
-
 
     /* =========================================================
        PERMITIR MOVER LA BARRA MANUALMENTE
        ========================================================= */
 
     pr.addEventListener("input", () => {
-
       a.currentTime = Number(pr.value);
-
-      /* Actualizar inmediatamente el color */
       updateProgressBar();
-
     });
-
 
     /* =========================================================
        CUANDO TERMINA EL AUDIO
        ========================================================= */
 
     a.addEventListener("ended", () => {
-
-      p.textContent = "▶ Hear";
-
+      p.textContent = "▶ Escuchar";
       pr.value = pr.max;
-
-      /* Barra completamente azul */
       updateProgressBar();
-
     });
 
   </script>
-
 </body>
 </html>
